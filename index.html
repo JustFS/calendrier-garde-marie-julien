@@ -12,6 +12,10 @@ for(const b of document.querySelectorAll('[data-person]'))b.addEventListener('cl
 
 
 
+
+
+
+
 <style> .mobile-grid .paint{flex-direction:row!important} .mobile-grid .half{min-height:0;min-width:0} </style>
 <script>(async()=>{
 'use strict';
@@ -35,3 +39,9 @@ try{
 })();
 </script>
 
+
+
+
+<style id="garde-layout-fix">
+.calendar-scroll{overflow-x:auto;overscroll-behavior-x:contain}.mobile-view,.legend .mobile-legend{display:none}.months{display:grid;grid-template-columns:repeat(12,minmax(99px,1fr));gap:1px;background:#edf0f5;min-width:1220px}.month{background:#fff;min-width:0}.month-head{height:50px;display:flex;align-items:center;justify-content:center;color:#36465e;font-weight:800;text-transform:uppercase;letter-spacing:.07em;font-size:11px;background:#f7f9fc;border-bottom:1px solid #e6ebf1}.month:nth-child(4n+1) .month-head{color:#135897}.month:nth-child(4n+2) .month-head{color:#b0511f}.month:nth-child(4n+3) .month-head{color:#39714b}.day{height:23px;display:flex;align-items:stretch;border-bottom:1px solid #eef0f3;position:relative;touch-action:pan-y;user-select:none}.day.weekend{background:#f2f4f8}.day.holiday{background:#e7f4e4}.day.empty{background:#fafbfd;pointer-events:none}.date{width:33px;flex:none;display:flex;align-items:center;padding-left:5px;color:#566377;font-size:11px;font-variant-numeric:tabular-nums;z-index:1;pointer-events:none}.day.weekend .date{font-weight:800}.paint{flex:1;display:flex;flex-direction:column;min-width:0;touch-action:none}.half{flex:1;min-height:0;transition:filter .1s}.half[data-person="marie"]{background:#f1874f}.half[data-person="julien"]{background:#428ce9}.day:hover .half{filter:brightness(.96)}.half:hover{box-shadow:inset 0 0 0 2px rgba(23,35,59,.3)}.month-foot{height:7px;background:#fff}.notes{padding:20px;position:sticky;top:18px}.notes textarea{display:block;margin-top:16px;width:100%;height:310px;resize:vertical;border:1px solid #dce3ec;background:#fcfdff;border-radius:13px;padding:13px;line-height:1.5;font-size:15px;color:#17233b;outline:none}.notes textarea:focus{border-color:#548fe0;box-shadow:0 0 0 3px #dfeaff}@media(max-width:1100px){.workspace{grid-template-columns:1fr}.notes{position:static}.notes textarea{height:180px}.months{min-width:1220px}}@media(max-width:650px){.app{padding:16px 12px 28px}.header{margin-bottom:15px}.header h1{font-size:26px}.year{display:none}.main,.notes{border-radius:15px}.toolbar{padding:12px;gap:10px}.tools{gap:5px}.tool{font-size:13px;padding:8px 10px}.hint{width:100%}.legend{padding:10px 12px}.calendar-scroll,.legend .desktop-legend{display:none}.legend .mobile-legend{display:inline-flex}.mobile-view{display:block;padding:12px}.mobile-nav{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:12px}.mobile-nav strong{font-size:15px;letter-spacing:-.02em;text-align:center}.mobile-weekdays,.mobile-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.mobile-weekdays{margin-bottom:5px;color:#758197;text-align:center;font-size:12px;font-weight:800}.mobile-grid .day{height:65px;min-width:0;display:flex;flex-direction:column;border:1px solid #e6eaf0;border-radius:8px;overflow:hidden}.mobile-grid .day.weekend{border-color:#d5dbe5}.mobile-grid .date{height:24px;width:auto;flex:none;padding:2px 4px;font-size:12px}.mobile-grid .date small{display:none}.mobile-grid .paint{height:39px;flex:none;flex-direction:row}.mobile-grid .half{min-height:0;min-width:0}.mobile-grid .day .month-mark{font-size:9px;margin-left:2px;text-transform:uppercase}.notes{padding:16px}}
+</style>
