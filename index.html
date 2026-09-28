@@ -10,6 +10,8 @@ for(const b of document.querySelectorAll('[data-person]'))b.addEventListener('cl
 </script></body></html>
 
 
+
+
 <style> .mobile-grid .paint{flex-direction:row!important} .mobile-grid .half{min-height:0;min-width:0} </style>
 <script>(async()=>{
 'use strict';
@@ -23,8 +25,8 @@ const bar=document.createElement('div');bar.className='cloud-sharebar';bar.inner
 const stat=document.getElementById('cloud-status'),setStatus=x=>stat.textContent=x;
 try{
  const [a,u,f]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js'),import('https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js')]);
- const app=a.initializeApp(cfg),auth=u.getAuth(app);await auth.authStateReady();if(!auth.currentUser)await u.signInAnonymously(auth);const db=f.getFirestore(app),days=f.collection(db,'calendars',id,'days'),notes=f.doc(db,'calendars',id,'notes','shared');
- f.onSnapshot(days,s=>{s.forEach(d=>{const v=d.data();document.querySelectorAll('.day[data-key="'+d.id+'"]').forEach(x=>{x.querySelector('[data-half="am"]').dataset.person=v.am||'';x.querySelector('[data-half="pm"]').dataset.person=v.pm||''})});setStatus('Synchronisé')},e=>{setStatus('Synchronisation indisponible');console.error(e)});
+ const app=a.initializeApp(cfg),auth=u.getAuth(app);await auth.authStateReady();if(!auth.currentUser)await u.signInAnonymously(auth);const db=f.getFirestore(app),days=f.collection(db,'calendars',id,'days'),notes=f.doc(db,'calendars',id,'notes','shared');const legacy=(()=>{try{return JSON.parse(localStorage.getItem('garde-partagee-v1')||'{}')}catch{return {}}})();if(Object.keys(legacy).length&&!localStorage.getItem('garde-cloud-migrated-'+id)){const batch=f.writeBatch(db);for(const [key,v] of Object.entries(legacy))if(v&&typeof v==='object')batch.set(f.doc(days,key),{am:v.am||'',pm:v.pm||''},{merge:true});batch.commit().then(()=>localStorage.setItem('garde-cloud-migrated-'+id,'1')).catch(()=>{});}
+ const remote={};const applyRemote=()=>{Object.entries(remote).forEach(([key,v])=>document.querySelectorAll('.day[data-key=\"'+key+'\"]').forEach(x=>{x.querySelector('[data-half=\"am\"]').dataset.person=v.am||'';x.querySelector('[data-half=\"pm\"]').dataset.person=v.pm||''}))};f.onSnapshot(days,s=>{s.forEach(d=>{remote[d.id]=d.data()});applyRemote();setStatus('Synchronisé')},e=>{setStatus('Synchronisation indisponible');console.error(e)});new MutationObserver(applyRemote).observe(document.querySelector('.workspace'),{childList:true,subtree:true});
  const note=document.getElementById('notes');f.onSnapshot(notes,s=>{if(s.exists()&&document.activeElement!==note)note.value=s.data().text||''},()=>{});let timer;note.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(()=>f.setDoc(notes,{text:note.value}).catch(()=>setStatus('Synchronisation indisponible')),500)});
  let drawing=false,last='';const hit=e=>{const d=e.target.closest('.day');if(!d||!d.dataset.key)return null;const p=d.querySelector('.paint').getBoundingClientRect();return[d,window.innerWidth<=650?(e.clientX<p.left+p.width/2?'am':'pm'):(e.clientY<p.top+p.height/2?'am':'pm')]};const send=e=>{const h=hit(e);if(!h||last===h[0].dataset.key+h[1])return;last=h[0].dataset.key+h[1];const b=document.querySelector('.tool.active'),v=b&&b.dataset.person==='erase'?'':b&&b.dataset.person;if(!v&&b&&b.dataset.person!=='erase')return;f.setDoc(f.doc(days,h[0].dataset.key),{[h[1]]:v},{merge:true}).catch(()=>setStatus('Synchronisation indisponible'))};document.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;drawing=true;last='';send(e)},true);document.addEventListener('pointermove',e=>{if(drawing)send(e)},true);document.addEventListener('pointerup',()=>{drawing=false;last=''},true);document.addEventListener('pointercancel',()=>{drawing=false;last=''},true);document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest('.day')){const d=e.target.closest('.day');const b=document.querySelector('.tool.active'),v=b&&b.dataset.person==='erase'?'':b&&b.dataset.person;if(v||b&&b.dataset.person==='erase')f.setDoc(f.doc(days,d.dataset.key),{[e.shiftKey?'pm':'am']:v},{merge:true}).catch(()=>setStatus('Synchronisation indisponible'))}},true);
  document.getElementById('copy-share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);setStatus('Lien copié')}catch{setStatus(location.href)}};
@@ -32,3 +34,4 @@ try{
 }catch(e){setStatus('Synchronisation indisponible');console.error(e)}
 })();
 </script>
+
